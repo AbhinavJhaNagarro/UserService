@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: userservice-deployment
+spec:
+  selector:
+    matchLabels:
+      app: userservice-pod
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: userservice-pod
+    spec:
+      containers:
+        - name: userservice-container
+          image: abhinavnagarro/userservice:dev
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: secrets
+              mountPath: /app/secrets
+              readOnly: true
+      volumes:
+        - name: secrets
+          secret:
+            secretName: secret-appsettings
